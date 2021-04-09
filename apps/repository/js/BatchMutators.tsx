@@ -66,16 +66,26 @@ export namespace BatchMutators {
 
         try {
 
+            // **** step 1 mutate things in memory faster before we commit. We
+            // have to do this for ALL the objects so their state is reflected
+            // first.
             for (const transaction of transactions) {
-
                 transaction.prepare();
+            }
 
-                refresh();
+            refresh();
+
+            // **** step 2 - commit all the transactions once we're done.
+
+            // TODO: we might want to migrate to some batching system eventually
+            // where we do 10 transactions at once.
+            for (const transaction of transactions) {
 
                 // TODO update progress of this operation using a snackbar
                 await transaction.commit();
 
-                // now refresh the UI
+                // now refresh the UI after each commit as this might be a bit
+                // slow so we want to make sure we have the latest data.
                 refresh();
                 progressReporter.incr();
 
