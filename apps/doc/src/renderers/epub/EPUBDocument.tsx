@@ -529,6 +529,43 @@ function useEPUBResizer() {
                 iframe.contentDocument.body.style.width = 'auto';
             }
 
+            const items = iframe.contentDocument.body.getElementsByTagName(
+              "*"
+            ) as HTMLCollectionOf<HTMLElement>;
+            const numberRegex = /\d+(?:\.\d+)?/;
+            for (var i = 0; i < items.length; i++) {
+              if (
+                items[i].lastChild?.nodeName &&
+                items[i].innerHTML === items[i].innerText
+              ) {
+                const styles = getComputedStyle(items[i]);
+                const fSize = numberRegex.exec(styles.fontSize);
+                const lHeight = numberRegex.exec(styles.lineHeight);
+                const fUnit = styles.fontSize.replace(/[^a-z]/g, "");
+                const lUnit = styles.lineHeight.replace(/[^a-z]/g, "");
+                // console.log("font", fSize, fUnit);
+                // console.log("line", lHeight, lUnit);
+                console.log(
+                  "lastChild",
+                  items[i].lastChild,
+                  typeof items[i].lastChild
+                );
+                console.log("innerText", items[i].innerText);
+                console.log("innerHTML", items[i].innerHTML);
+                console.log("textContent", items[i].textContent);
+                console.log("check", items[i].innerHTML === items[i].innerText);
+                console.log("nodeName", items[i].lastChild?.nodeName);
+                items[i].style.fontSize = `${
+                  (fSize ? parseFloat(fSize[0]) : 1) * 2
+                }${fUnit}`;
+                items[i].style.lineHeight = `${
+                  (lHeight ? parseFloat(lHeight[0]) : 1) * 2
+                }${lUnit}`;
+                console.log("elem", items[i]);
+                console.log("-------");
+              }
+            }
+
         }
 
         console.log("Resizing EPUB");
