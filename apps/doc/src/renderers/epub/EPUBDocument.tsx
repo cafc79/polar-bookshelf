@@ -143,39 +143,7 @@ export const EPUBDocument = React.memo(function EPUBDocument(props: IProps) {
     const stylesheet = useStylesheetURL();
     const linkLoader = useLinkLoader();
 
-    const setScale = React.useCallback((scale: ScaleLevelTuple) => {
-
-      if (docViewerRef.current) {
-          scaleRef.current = scale;
-          docViewerRef.current.viewer.currentScaleValue = scale.value;
-
-          dispatchPDFDocMeta();
-
-          return docViewerRef.current.viewer.currentScale;
-
-      }
-
-      throw new Error("No viewer");
-
-    }, [dispatchPDFDocMeta]);
-
-    const scaleLeveler = React.useCallback((scale: ScaleLevelTuple) => {
-      return setScale(scale);
-    }, [setScale]);
-
-    const resize = React.useCallback((): number => {
-
-    if (['page-width', 'page-fit'].includes(scaleRef.current.value)) {
-        setScale(scaleRef.current);
-    }
-
-    if (docViewerRef.current) {
-        return docViewerRef.current.viewer.currentScale;
-    } else {
-        throw new Error("No viewer");
-    }
-
-    }, [setScale]);
+    
 
     const doLoad = React.useCallback(async () => {
 
@@ -186,7 +154,7 @@ export const EPUBDocument = React.memo(function EPUBDocument(props: IProps) {
             // the doc scale needs to be set to that we're 1.0 as epub doesn't support
             // scale just yet.
             setDocScale({scale: SCALE_VALUE_PAGE_WIDTH, scaleValue: 1.0});
-            setScaleLeveler(scaleLeveler);
+            //setScaleLeveler(scaleLeveler);
 
         }
 
@@ -562,77 +530,6 @@ function useEPUBResizer() {
 
             } else {
                 iframe.contentDocument.body.style.width = 'auto';
-            }
-
-            const items = iframe.contentDocument.body.getElementsByTagName(
-              "*"
-            ) as HTMLCollectionOf<HTMLElement>;
-            const numberRegex = /\d+(?:\.\d+)?/;
-            const elements = []
-
-            const emDiv = document.createElement("div");
-            emDiv.id="emDiv"
-            emDiv.style.height = '1em'
-            emDiv.style.width = '1px'
-            emDiv.style.position = 'absolute'
-            emDiv.style.opacity = '0'
-            emDiv.innerHTML = " ";
-            const remDiv = document.createElement("div");
-            remDiv.id="remDiv"
-            remDiv.style.height = '1rem'
-            remDiv.style.width = '1px'
-            remDiv.style.position = 'absolute'
-            remDiv.style.opacity = '0'
-            remDiv.innerHTML = " ";
-            
-            iframe.contentDocument.body.appendChild(emDiv)
-            iframe.contentDocument.body.appendChild(remDiv)
-
-            for (var i = 0; i < items.length; i++) {
-              const styles = getComputedStyle(items[i]);
-              elements.push({fSize:numberRegex.exec(styles.fontSize),
-                lHeight: numberRegex.exec(styles.lineHeight),
-                fUnit: styles.fontSize.replace(/[^a-z]/g, ""),
-                lUnit: styles.lineHeight.replace(/[^a-z]/g, "")})
-            }
-
-            const em = getComputedStyle(iframe.contentDocument.getElementById('emDiv')!)
-            console.log('em.height',em.height)
-            const rem = getComputedStyle(iframe.contentDocument.getElementById('remDiv')!)
-            console.log('rem.height',rem.height)
-
-            for (var i = 0; i < items.length; i++) {
-              let font = `${
-                (elements[i].fSize ? parseFloat(elements[i].fSize![0]) : 1) * 2
-              }${elements[i].fUnit}`
-              let line = `${
-                (elements[i].lHeight ? parseFloat(elements[i].lHeight![0]) : 1) * 2
-              }${elements[i].lUnit}`
-              console.log('numberRegex.exec(rem.height)',numberRegex.exec(rem.height))
-              if (elements[i].fUnit === "rem"){
-                font=`${parseFloat(numberRegex.exec(rem.height)![0]) * parseFloat(elements[i].fSize![0]) * 2}px`
-              }
-              if (elements[i].fUnit === "em"){
-                font=`${parseFloat(numberRegex.exec(em.height)![0]) * parseFloat(elements[i].fSize![0]) * 2}px`
-              }
-              if (elements[i].lUnit === "rem"){
-                line=`${parseFloat(numberRegex.exec(rem.height)![0]) * parseFloat(elements[i].lHeight![0]) * 2}px`
-              }
-              if (elements[i].lUnit === "em"){
-                line=`${parseFloat(numberRegex.exec(em.height)![0]) * parseFloat(elements[i].lHeight![0]) * 2}px`
-              }
-              items[i].style.fontSize = font;
-              items[i].style.lineHeight = line;
-              // console.log("font", elements[i].fSize, elements[i].fUnit);
-              // console.log("line", elements[i].lHeight, elements[i].lUnit);
-              // console.log("innerText", items[i].innerText);
-              // console.log("innerHTML", items[i].innerHTML);
-              // console.log("textContent", items[i].textContent);
-              // console.log("check", items[i].innerHTML === items[i].innerText);
-              // console.log("nodeName", items[i].lastChild?.nodeName);
-              
-              // console.log("elem", items[i]);
-              // console.log("-------");
             }
 
         }
