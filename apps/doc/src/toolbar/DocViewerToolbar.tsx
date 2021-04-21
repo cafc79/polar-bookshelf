@@ -212,7 +212,7 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
 
                                 <DocViewerToolbarOverflowButton docInfo={docMeta?.docInfo}/>
 
-                                <DockLayoutToggleButton side='right' size="small"/>
+                                <DockLayoutToggleButton side="right" size="small"/>
 
                             </MUIButtonBar>
                         </div>
