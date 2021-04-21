@@ -368,8 +368,6 @@ export const RepositoryApp = React.memo(function RepositoryApp(props: IProps) {
 
                                                                                         </Switch>
 
-                                                                                        <RepoFooter/>
-
                                                                                     </div>
                                                                                 </div>
 
