@@ -1,7 +1,6 @@
 import * as React from "react";
 import {arrayStream} from "polar-shared/src/util/ArrayStreams";
 import {ScaleLevel, ScaleLevelTuples} from "../ScaleLevels";
-import IconButton from "@material-ui/core/IconButton";
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import {MUIPaperToolbar} from "../../../../web/js/mui/MUIPaperToolbar";
@@ -14,7 +13,6 @@ import {useDocViewerCallbacks, useDocViewerStore} from "../DocViewerStore";
 import Divider from "@material-ui/core/Divider";
 import {DeviceRouters} from "../../../../web/js/ui/DeviceRouter";
 import {useDocFindStore} from "../DocFindStore";
-import {DocumentWriteStatus} from "../../../../web/js/apps/repository/connectivity/DocumentWriteStatus";
 import {MUIDocFlagButton} from "../../../repository/js/doc_repo/buttons/MUIDocFlagButton";
 import {MUIDocArchiveButton} from "../../../repository/js/doc_repo/buttons/MUIDocArchiveButton";
 import {DocViewerToolbarOverflowButton} from "../DocViewerToolbarOverflowButton";
@@ -28,6 +26,8 @@ import {deepMemo} from "../../../../web/js/react/ReactUtils";
 import {DockLayoutToggleButton} from "../../../../web/js/ui/doc_layout/DockLayoutToggleButton";
 import {ZenModeActiveContainer} from "../../../../web/js/mui/ZenModeActiveContainer";
 import {ZenModeButton} from "./ZenModeButton";
+import {createStyles, makeStyles} from "@material-ui/core";
+import {MUIDefaultIconButton} from "../../../../web/js/mui/icon_buttons/MUIDefaultIconButton";
 
 const getScaleLevelTuple = (scale: ScaleLevel) => (
     arrayStream(ScaleLevelTuples)
@@ -35,13 +35,42 @@ const getScaleLevelTuple = (scale: ScaleLevel) => (
         .first()
 );
 
+export const useDocViewerToolbarStyles = makeStyles((theme) =>
+    createStyles({
+        toolbarFontColor: {
+            color: theme.palette.text.secondary
+        },
+    }),
+);
+
+
+export const DocActions = () => {
+    const {onDocTagged, toggleDocArchived, toggleDocFlagged} = useDocViewerCallbacks();
+    const {docMeta} = useDocViewerStore(['docMeta']);
+
+    return (
+        <>
+            <MUIDocTagButton size="small"
+                             onClick={onDocTagged}/>
+
+            <MUIDocArchiveButton size="small"
+                                 onClick={toggleDocArchived}
+                                 active={docMeta?.docInfo?.archived}/>
+
+            <MUIDocFlagButton size="small"
+                              onClick={toggleDocFlagged}
+                              active={docMeta?.docInfo?.flagged}/>
+        </>
+    );
+};
+
 export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
 
     const {docScale, pageNavigator, scaleLeveler, docMeta}
         = useDocViewerStore(['docScale', 'pageNavigator', 'scaleLeveler', 'docMeta']);
     const {finder} = useDocFindStore(['finder']);
-    const {setScale, onDocTagged, doZoom, toggleDocArchived, toggleDocFlagged} = useDocViewerCallbacks();
-
+    const {setScale, doZoom} = useDocViewerCallbacks();
+    const classes = useDocViewerToolbarStyles();
     const handleScaleChange = React.useCallback((scale: ScaleLevel) => {
 
         setScale(getScaleLevelTuple(scale)!);
@@ -62,9 +91,7 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
         <ZenModeActiveContainer>
             <MUIPaperToolbar borderBottom>
 
-                <div style={{
-                         display: 'flex',
-                     }}
+                <div style={{display: 'flex'}}
                      className="p-1 vertical-aligned-children">
 
                     <div style={{
@@ -115,21 +142,26 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
                              {docScale && scaleLeveler && (
                                 <DeviceRouters.Desktop>
                                     <MUIButtonBar>
-                                        <IconButton size="small" onClick={() => doZoom('-')}>
+                                        <MUIDefaultIconButton size="small"
+                                                              onClick={() => doZoom('-')}>
                                             <RemoveIcon/>
-                                        </IconButton>
+                                        </MUIDefaultIconButton>
 
                                             <FormControl variant="outlined" size="small">
                                                 <Select value={zoomValue}
+                                                        classes={{ root: classes.toolbarFontColor }}
                                                         onChange={event => handleScaleChange(event.target.value as ScaleLevel)}>
                                                     {zoomValue === "custom" &&
-                                                        <MenuItem disabled value="custom">
-                                                            {(+docScale.scale.value * 100).toFixed(2)}%
+                                                        <MenuItem value="custom"
+                                                                  classes={{ root: classes.toolbarFontColor}}
+                                                                  disabled>
+                                                            {docScale.scale.label}
                                                             &nbsp;(Custom)
                                                         </MenuItem>
                                                     }
                                                     {ScaleLevelTuples.map(current => (
                                                         <MenuItem key={current.value}
+                                                                  classes={{ root: classes.toolbarFontColor}}
                                                                   value={current.value}>
                                                             {current.label}
                                                         </MenuItem>
@@ -137,9 +169,10 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
                                                 </Select>
                                             </FormControl>
 
-                                        <IconButton size="small"  onClick={() => doZoom('+')}>
+                                        <MUIDefaultIconButton size="small"
+                                                              onClick={() => doZoom('+')}>
                                             <AddIcon/>
-                                        </IconButton>
+                                        </MUIDefaultIconButton>
 
                                     </MUIButtonBar>
                                 </DeviceRouters.Desktop>
@@ -163,16 +196,7 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
 
 
                                 {/* TODO: implement keyboard shortcuts for these. */}
-                                <MUIDocTagButton size="small"
-                                                 onClick={onDocTagged}/>
-
-                                <MUIDocArchiveButton size="small"
-                                                     onClick={toggleDocArchived}
-                                                     active={docMeta?.docInfo?.archived}/>
-
-                                <MUIDocFlagButton size="small"
-                                                  onClick={toggleDocFlagged}
-                                                  active={docMeta?.docInfo?.flagged}/>
+                                <DocActions />
 
                                 <Divider orientation="vertical" flexItem={true}/>
 

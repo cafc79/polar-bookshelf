@@ -135,18 +135,14 @@ const OutlineTreeView = React.memo(function OutlineTreeView() {
 
     const {outline} = useDocViewerStore(['outline']);
 
-    if (! outline) {
-        return (
-            <NoOutlineAvailable/>
-        );
-    }
-
     return (
-
         <Box m={1}>
-            {outline.items.map((item, idx) => (
-                <OutlineTreeItem key={item.id || idx} item={item}/>
-            ))}
+            {!outline
+                ? <NoOutlineAvailable/>
+                : outline.items.map((item, idx) => (
+                    <OutlineTreeItem key={item.id || idx} item={item}/>
+                ))
+            }
         </Box>
     );
 

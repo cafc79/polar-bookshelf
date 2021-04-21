@@ -3,6 +3,8 @@ import * as React from "react";
 import {useState} from "react";
 import TextField from "@material-ui/core/TextField";
 import {deepMemo} from "../../../../web/js/react/ReactUtils";
+import {createStyles} from "@material-ui/styles";
+import {makeStyles} from "@material-ui/core";
 
 interface IProps {
     readonly nrPages: number;
@@ -13,11 +15,21 @@ interface IState {
     readonly value: string;
 }
 
+export const useStyles = makeStyles((theme) =>
+    createStyles({
+        textField: {
+            '& .MuiInputBase-input': { color: theme.palette.text.secondary },
+        },
+    }),
+);
+
+
 export const PageNumberInput = deepMemo(function PageNumberInput(props: IProps) {
 
     const {page, pageNavigator} = useDocViewerStore(['page', 'pageNavigator']);
     const {onPageJump} = useDocViewerCallbacks();
     const ref = React.useRef<HTMLElement | null>();
+    const classes = useStyles();
 
     // yield to the property, except if we're changing the value, then jump
     // to the right value, and then blur the element...
@@ -122,6 +134,7 @@ export const PageNumberInput = deepMemo(function PageNumberInput(props: IProps) 
                        disabled={!pageNavigator || pageNavigator.count <= 1}
                        onBlur={() => handleBlur()}
                        onKeyDown={event => handleKeyDown(event)}
+                       classes={{ root: classes.textField }}
                        type="text"
                        size="small"
                        variant="outlined"

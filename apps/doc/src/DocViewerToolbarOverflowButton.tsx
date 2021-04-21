@@ -17,6 +17,7 @@ import {NULL_FUNCTION} from "polar-shared/src/util/Functions";
 import ViewWeekIcon from '@material-ui/icons/ViewWeek';
 import {ISelectOption} from "../../../web/js/ui/dialogs/SelectDialog";
 import {Arrays} from "polar-shared/src/util/Arrays";
+import {useDocViewerToolbarStyles} from './toolbar/DocViewerToolbar';
 
 interface IProps {
     readonly docInfo: IDocInfo | undefined;
@@ -73,6 +74,7 @@ function useSetColumnLayoutCallback() {
 export const DocViewerToolbarOverflowButton = deepMemo(function DocViewerToolbarOverflowButton(props: IProps) {
 
     const linkLoader = useLinkLoader();
+    const toolbarClasses = useDocViewerToolbarStyles();
 
     const {closeCurrentTab} = useSideNavCallbacks();
 
@@ -86,11 +88,11 @@ export const DocViewerToolbarOverflowButton = deepMemo(function DocViewerToolbar
         <MUIMenu caret
                  placement="bottom-end"
                  button={{
-                     icon: <MoreVertIcon/>,
+                     icon: <MoreVertIcon className={toolbarClasses.toolbarFontColor} />,
                      size: 'small',
                  }}>
 
-            <div>
+            <div className={toolbarClasses.toolbarFontColor}>
                 <MUIMenuItem text="Open Original URL in Browser"
                              icon={<OpenInBrowserIcon/>}
                              disabled={! props.docInfo?.url}

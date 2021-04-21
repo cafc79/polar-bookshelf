@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {SideType} from "./DockLayoutManager";
 import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from "@material-ui/core/IconButton";
 import {useDockLayoutCallbacks} from "./DockLayoutStore";
 import {MUITooltip} from "../../mui/MUITooltip";
+import {MUIDefaultIconButton} from '../../../../web/js/mui/icon_buttons/MUIDefaultIconButton';
 
 interface IProps {
     readonly size?: 'small';
@@ -20,9 +20,9 @@ export const DockLayoutToggleButton = React.memo(function DockLayoutToggleButton
 
     return (
         <MUITooltip title={`Toggle ${props.side} sidebar`}>
-            <IconButton size={props.size} onClick={handleToggle}>
+            <MUIDefaultIconButton size={props.size} onClick={handleToggle}>
                 <MenuIcon/>
-            </IconButton>
+            </MUIDefaultIconButton>
         </MUITooltip>
     );
 
