@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme) =>
     }),
 );
 
-export const MUIDefaultIconButton: React.FC<IconButtonProps> = React.forwardRef((props, ref) => {
+export const MUIIconButton: React.FC<IconButtonProps> = React.forwardRef((props, ref) => {
     const classes = useStyles();
 
     return <IconButton {...props} ref={ref} className={clsx(classes.root, props.className)} />;

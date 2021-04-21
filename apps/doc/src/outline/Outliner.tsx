@@ -14,6 +14,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
+            background: theme.palette.background.paper,
         },
         folderExpandCollapse: {
             fontSize: '1.5em',
@@ -134,15 +135,21 @@ const OutlineTreeItem = deepMemo(function OutlineTreeItem(props: IProps) {
 const OutlineTreeView = React.memo(function OutlineTreeView() {
 
     const {outline} = useDocViewerStore(['outline']);
+    const classes = useStyles();
+
+    if (!outline) {
+        return (
+            <Box p={1} className={classes.root}>
+                <NoOutlineAvailable/>
+            </Box>
+        );
+    }
 
     return (
-        <Box m={1}>
-            {!outline
-                ? <NoOutlineAvailable/>
-                : outline.items.map((item, idx) => (
-                    <OutlineTreeItem key={item.id || idx} item={item}/>
-                ))
-            }
+        <Box p={1} className={classes.root}>
+            {outline.items.map((item, idx) => (
+                <OutlineTreeItem key={item.id || idx} item={item}/>
+            ))}
         </Box>
     );
 

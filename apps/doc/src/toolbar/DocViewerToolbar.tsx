@@ -27,7 +27,7 @@ import {DockLayoutToggleButton} from "../../../../web/js/ui/doc_layout/DockLayou
 import {ZenModeActiveContainer} from "../../../../web/js/mui/ZenModeActiveContainer";
 import {ZenModeButton} from "./ZenModeButton";
 import {createStyles, makeStyles} from "@material-ui/core";
-import {MUIDefaultIconButton} from "../../../../web/js/mui/icon_buttons/MUIDefaultIconButton";
+import {MUIIconButton} from "../../../../web/js/mui/icon_buttons/MUIIconButton";
 
 const getScaleLevelTuple = (scale: ScaleLevel) => (
     arrayStream(ScaleLevelTuples)
@@ -142,10 +142,10 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
                              {docScale && scaleLeveler && (
                                 <DeviceRouters.Desktop>
                                     <MUIButtonBar>
-                                        <MUIDefaultIconButton size="small"
+                                        <MUIIconButton size="small"
                                                               onClick={() => doZoom('-')}>
                                             <RemoveIcon/>
-                                        </MUIDefaultIconButton>
+                                        </MUIIconButton>
 
                                             <FormControl variant="outlined" size="small">
                                                 <Select value={zoomValue}
@@ -169,10 +169,10 @@ export const DocViewerToolbar = deepMemo(function DocViewerToolbar() {
                                                 </Select>
                                             </FormControl>
 
-                                        <MUIDefaultIconButton size="small"
+                                        <MUIIconButton size="small"
                                                               onClick={() => doZoom('+')}>
                                             <AddIcon/>
-                                        </MUIDefaultIconButton>
+                                        </MUIIconButton>
 
                                     </MUIButtonBar>
                                 </DeviceRouters.Desktop>

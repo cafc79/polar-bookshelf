@@ -1,7 +1,7 @@
 import * as React from "react";
 import SearchIcon from '@material-ui/icons/Search';
 import {useDocFindCallbacks} from "./DocFindStore";
-import {MUIDefaultIconButton} from "../../../web/js/mui/icon_buttons/MUIDefaultIconButton";
+import {MUIIconButton} from "../../../web/js/mui/icon_buttons/MUIIconButton";
 
 interface IProps {
     readonly className?: string;
@@ -12,11 +12,11 @@ export const DocFindButton = React.memo(function DocFindButton(props: IProps) {
     const {setActive} = useDocFindCallbacks();
 
     return (
-        <MUIDefaultIconButton size="small"
+        <MUIIconButton size="small"
                     className={props.className}
                     onClick={() => setActive(true)}>
             <SearchIcon/>
-        </MUIDefaultIconButton>
+        </MUIIconButton>
     )
 
 });

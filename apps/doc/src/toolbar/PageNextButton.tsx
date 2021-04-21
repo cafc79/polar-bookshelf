@@ -2,7 +2,7 @@ import {useDocViewerCallbacks, useDocViewerStore} from "../DocViewerStore";
 import * as React from "react";
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import {deepMemo} from "../../../../web/js/react/ReactUtils";
-import {MUIDefaultIconButton} from "../../../../web/js/mui/icon_buttons/MUIDefaultIconButton";
+import {MUIIconButton} from "../../../../web/js/mui/icon_buttons/MUIIconButton";
 
 export const PageNextButton = deepMemo(function PageNextButton() {
 
@@ -10,11 +10,11 @@ export const PageNextButton = deepMemo(function PageNextButton() {
     const {pageNavigator, page} = useDocViewerStore(['pageNavigator', 'page']);
 
     return (
-        <MUIDefaultIconButton size="small"
+        <MUIIconButton size="small"
                     disabled={!pageNavigator || page >= pageNavigator.count}
                     onClick={onPageNext}>
             <ArrowDownwardIcon/>
-        </MUIDefaultIconButton>
+        </MUIIconButton>
     );
 
 });

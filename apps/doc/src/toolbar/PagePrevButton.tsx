@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useDocViewerCallbacks, useDocViewerStore} from "../DocViewerStore";
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import {MUIDefaultIconButton} from "../../../../web/js/mui/icon_buttons/MUIDefaultIconButton";
+import {MUIIconButton} from "../../../../web/js/mui/icon_buttons/MUIIconButton";
 
 export const PagePrevButton = React.memo(function PagePrevButton() {
 
@@ -9,11 +9,11 @@ export const PagePrevButton = React.memo(function PagePrevButton() {
     const {pageNavigator, page} = useDocViewerStore(['pageNavigator', 'page']);
 
     return (
-        <MUIDefaultIconButton size="small"
+        <MUIIconButton size="small"
                     disabled={!pageNavigator || page <= 1}
                     onClick={onPagePrev}>
             <ArrowUpwardIcon/>
-        </MUIDefaultIconButton>
+        </MUIIconButton>
     );
 
 });
