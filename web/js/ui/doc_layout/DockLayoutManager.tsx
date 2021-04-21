@@ -308,7 +308,7 @@ export interface BaseDockPanel {
 
 export interface FixedDockPanel extends BaseDockPanel {
     readonly type: 'fixed';
-    readonly component: JSX.Element;
+    readonly component: React.ReactElement | null;
     readonly width?: CSSWidth;
     readonly collapsed?: boolean;
 
@@ -320,7 +320,7 @@ export interface FixedDockPanel extends BaseDockPanel {
 
 export interface GrowDockPanel extends BaseDockPanel {
     readonly type: 'grow';
-    readonly component: JSX.Element;
+    readonly component: React.ReactElement | null;
     readonly grow?: number;
 }
 
